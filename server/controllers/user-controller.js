@@ -73,6 +73,26 @@ module.exports = {
     if( !user ) return res.status(401).json({msg: "un-authorized"})
     
     return res.status(200).json({ _id: user._id, email: user.email})
+  },
+
+  async deleteUser({ params }, res) {
+    const user = await User.deleteOne({ _id: params.id });
+    if (!user) return res.status(400).json({ message: 'Unable to delete user' });
+    res.status(200).json({ _id: user._id, email: user.email });
+  },
+
+  async getUser({ params }, res) {
+const user = await User.findOne({ _id: params.id });
+    if (!user) return res.status(400).json({ message: 'Unable to get user' });
+    res.status(200).json({ _id: user._id, email: user.email });
+  },
+
+  async getUsers(req, res) {
+    const users = await User.find({});
+    if (!users) return res.status(400).json({ message: 'Unable to get users' });
+    res.status(200).json(users);
   }
+
+
 
 };
