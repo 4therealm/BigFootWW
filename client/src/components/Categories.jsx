@@ -46,14 +46,14 @@ const Categories=() => {
     }
   }
 
-  const addItem=async (productId,quantity,price,name) => {
+  const addItem=async (productId,quantity,price,name, imgUrl) => {
     try {
       const response=await fetch(`/api/cart/${user._id}/add`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({productId,quantity,price,name}),
+        body: JSON.stringify({productId,quantity,price,name, imgUrl}),
       })
 
       if(response.ok) {
@@ -162,7 +162,7 @@ const Categories=() => {
                      <Card.Text>In stock: {product.stock}</Card.Text>
                      <Button
                        onClick={() =>
-                         addItem(product._id, 1, product.price, product.name)
+                         addItem(product._id, 1, product.price, product.name, product.imageUrl)
                        }
                      >
                        Add to Cart

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Container, Alert, Button } from 'react-bootstrap';
+import { Container, Alert, Button, Row, Col } from 'react-bootstrap';
 import { useAppCtx } from '../utils/AppContext';
 
 const Cart = () => {
@@ -77,40 +77,30 @@ const Cart = () => {
 
   const totalPrice = calculateTotalPrice();
   return (
-    <Container>
+    <Container className='cart-container'>
       {updatedCart.length > 0 ? (
-        <Table>
-          <thead>
-            <tr>
-              <th>Product Name</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {updatedCart.map((item, index) => (
-              <tr key={item.productId}>
-                <td>{item.name}</td>
-                <td>
-                  <Button variant="text-primary" size="lg" color='red'  onClick={() => decreaseQuantity(index)}>
-                    -
-                  </Button>{' '}
-                  {item.quantity}{' '}
-                  <Button variant="text-primary" size="lg" color='red' onClick={() => increaseQuantity(index)}>
-                    +
-                  </Button>
-                </td>
-                <td>{item.price}</td>
-                <td>
-                  <Button variant="danger" size="sm" onClick={() => removeItem(user._id, item.productId)}>
-                    Remove
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <div>
+          {updatedCart.map((item, index) => (
+            <Row key={item.productId} className="mb-3">
+              <Col xs={12} md={3}>{item.imgUrl}{item.name}</Col>
+              <Col xs={12} md={3}>
+                <Button variant="text-primary" size="lg" onClick={() => decreaseQuantity(index)}>
+                  -
+                </Button>{' '}
+                {item.quantity}{' '}
+                <Button variant="text-primary" size="lg" onClick={() => increaseQuantity(index)}>
+                  +
+                </Button>
+              </Col>
+              <Col xs={12} md={3}>${item.price}</Col>
+              <Col xs={12} md={3}>
+                <Button variant="danger" size="sm" onClick={() => removeItem(user._id, item.productId)}>
+                  Remove
+                </Button>
+              </Col>
+            </Row>
+          ))}
+        </div>
       ) : (
         <Alert variant="info">Your cart is empty</Alert>
       )}
@@ -120,7 +110,7 @@ const Cart = () => {
           Update Cart
         </Button>
       )}
-    </Container>
+      </Container>
   );
 };
 

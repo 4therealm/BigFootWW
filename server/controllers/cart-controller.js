@@ -3,7 +3,8 @@ const {User} = require('../models/');
 
 async function addItemToCart(req, res) {
   const { userId } = req.params;
-  const { productId, quantity, price, name } = req.body;
+  const { productId, quantity, price, name, imgUrl } = req.body;
+  console.log(req.body);
 
   try {
     const user = await User.findById(userId);
@@ -20,7 +21,7 @@ async function addItemToCart(req, res) {
       user.cart.items[cartItemIndex].quantity += quantity;
     } else {
       // Add a new item to the cart
-      user.cart.items.push({ productId, quantity, price, name });
+      user.cart.items.push({ productId, quantity, price, name, imgUrl });
     }
 
     await user.save();
@@ -89,6 +90,7 @@ async function updateCartItemsQuantities(req, res) {
 async function getCart(req, res) {
   const { userId } = req.params;
   const cart = await User.findById(userId).select('cart');
+  console.log(cart);
   res.status(200).json(cart);
 }
 
