@@ -1,7 +1,8 @@
 import React,{useState,useEffect} from 'react'
-import {CardGroup,Card,Breadcrumb,Button} from 'react-bootstrap'
+import { Card,Breadcrumb,Button, Container, Row, Col} from 'react-bootstrap'
 import {useAppCtx} from '../utils/AppContext'
-import ImageUploader from './ImageUploader'
+
+
 
 
 
@@ -98,7 +99,6 @@ const Categories=() => {
 
   return (
     <>
-    <ImageUploader productId={productId}/>
       <Breadcrumb>
         <Breadcrumb.Item href="#" onClick={resetCategory}>
           Categories
@@ -111,43 +111,68 @@ const Categories=() => {
         {selectedProduct&&<Breadcrumb.Item active>{selectedProduct.name}</Breadcrumb.Item>}
       </Breadcrumb>
       {showCategories&&(
-        <CardGroup>
-          {loading&&<div>Loading...</div>}
-          {error&&<div>{error}</div>}
-          {categories.map((category) => (
-            <Card key={category._id} onClick={() => getOneCategory(category._id)} style={{color: 'white', cursor: 'pointer',margin: '10px',outline: '2px solid red',background: 'black'}}>
-              <Card.Body>
-                <Card.Title>{category.name}</Card.Title>
-                {/* <Card.Text>{category._id}</Card.Text> */}
-              </Card.Body>
-            </Card>
+       <Container>
+       <Row>
+         {loading && <div>Loading...</div>}
+         {error && <div>{error}</div>}
+         {categories.map((category) => (
+           <Col xs={12} sm={6} md={4} lg={3} key={category._id} className="mb-4">
+             <Card
+               onClick={() => getOneCategory(category._id)}
+               style={{
+                 color: "white",
+                 cursor: "pointer",
+                 margin: "10px",
+                 outline: "2px solid red",
+                 background: "black",
+               }}
+             >
+               <Card.Body>
+                 <Card.Title>{category.name}</Card.Title>
+                 {/* <Card.Text>{category._id}</Card.Text> */}
+               </Card.Body>
+             </Card>
+            </Col>
+
           ))}
-        </CardGroup>
+        </Row>
+      </Container>
       )}
 
       {!showCategories&&(
         <div>
           {activeCategoryProducts.length? (
-            <CardGroup>
-              {activeCategoryProducts.map((product) => (
-                <Card key={product._id} style={{color: 'white', cursor: 'pointer',margin: '10px',outline: '2px solid red',background: 'black'}}>
-                  <Card.Body>
-                    <Card.Img variant="top" src={product.imageUrl} />
-                    <Card.Title>Product: {product.name}</Card.Title>
-                    <Card.Text >Price: {product.price}</Card.Text>
-                    <Card.Text >In stock: {product.stock}</Card.Text>
-
-                    <Button
-                      onClick={() =>
-                        addItem(product._id,1,product.price,product.name)
-                      }
-                    >
-                      Add to Cart
-                    </Button>
-                  </Card.Body>
-                </Card>
-              ))}
-            </CardGroup>
+           <Container>
+           <Row>
+             {activeCategoryProducts.map((product) => (
+               <Col xs={12} sm={6} md={4} lg={3} key={product._id} className="mb-4">
+                 <Card
+                   style={{
+                     color: "white",
+                     cursor: "pointer",
+                     margin: "10px",
+                     outline: "2px solid red",
+                     background: "black",
+                   }}
+                 >
+                   <Card.Body>
+                     <Card.Img variant="top" src={product.imageUrl} />
+                     <Card.Title>{product.name}</Card.Title>
+                     <Card.Text>${product.price}</Card.Text>
+                     <Card.Text>In stock: {product.stock}</Card.Text>
+                     <Button
+                       onClick={() =>
+                         addItem(product._id, 1, product.price, product.name)
+                       }
+                     >
+                       Add to Cart
+                     </Button>
+                   </Card.Body>
+                 </Card>
+               </Col>
+             ))}
+           </Row>
+         </Container>
           ):(
             <p>No products in this category.</p>
           )}
