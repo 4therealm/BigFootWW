@@ -5,7 +5,7 @@ const router = require('express').Router();
 const {
   addItemToCart,
   removeItemFromCart,
-  updateCartItemQuantity,
+  updateCartItemsQuantities,
   getCart
 } = require('../../controllers/cart-controller');
 
@@ -22,8 +22,8 @@ router
   .delete(removeItemFromCart);
 
 router
-  .route('/:userId/update/:productId')
-  .put(updateCartItemQuantity);
+  .route('/:userId/update/')
+  .put(updateCartItemsQuantities);
 
 
 module.exports = router;

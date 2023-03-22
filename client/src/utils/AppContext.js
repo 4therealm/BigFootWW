@@ -1,12 +1,13 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
-import cookie from "js-cookie"
+import React, { createContext, useContext, useEffect, useState } from "react";
+import cookie from "js-cookie";
 
-export const AppContext = createContext({})
-export const useAppCtx = () => useContext(AppContext)
+export const AppContext = createContext({});
+export const useAppCtx = () => useContext(AppContext);
 
-export const AppProvider = ({children}) => {
-  const [ user, setUser ] = useState(null)
+export const AppProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [userCart, setUserCart] = useState([]);
+  const [updatedCart, setUpdatedCart] = useState([]);
 
   const verifyUser = async () => {
     const authCookie = cookie.get("auth-token");
@@ -26,19 +27,20 @@ export const AppProvider = ({children}) => {
           console.log("User verified:", result);
         }
       } else {
-        console.error('Error verifying user:', await query.text());
+        console.error("Error verifying user:", await query.text());
       }
     }
   };
-  
 
   useEffect(() => {
-    verifyUser()
-  },[])
+    verifyUser();
+  }, []);
 
   return (
-    <AppContext.Provider value={{ user, userCart, setUserCart }}>
+    <AppContext.Provider
+      value={{ user, userCart, setUserCart, updatedCart, setUpdatedCart }}
+    >
       {children}
     </AppContext.Provider>
-  )
-}
+  );
+};

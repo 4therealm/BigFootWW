@@ -52,9 +52,9 @@ async function removeItemFromCart(req, res) {
   }
 }
 
-async function updateCartItemQuantity(req, res) {
-  const { userId, productId } = req.params;
-  const { quantity } = req.body;
+async function updateCartItemsQuantities(req, res) {
+  const { userId } = req.params;
+  const itemsToUpdate = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -62,22 +62,29 @@ async function updateCartItemQuantity(req, res) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const cartItemIndex = user.cart.items.findIndex(
-      (item) => item.productId.toString() === productId
-    );
+    for (const itemToUpdate of itemsToUpdate) {
+      const { productId, quantity } = itemToUpdate;
 
-    if (cartItemIndex >= 0) {
-      // Update the quantity of the item in the cart
-      user.cart.items[cartItemIndex].quantity = quantity;
-      await user.save();
-      res.status(200).json(user.cart);
-    } else {
-      res.status(404).json({ message: 'Item not found in cart' });
+      const cartItemIndex = user.cart.items.findIndex(
+        (item) => item.productId.toString() === productId
+      );
+
+      if (cartItemIndex >= 0) {
+        // Update the quantity of the item in the cart
+        user.cart.items[cartItemIndex].quantity = quantity;
+      } else {
+        res.status(404).json({ message: `Item with productId: ${productId} not found in cart` });
+        return;
+      }
     }
+
+    await user.save();
+    res.status(200).json(user.cart);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating item quantity in cart', error });
+    res.status(500).json({ message: 'Error updating item quantities in cart', error });
   }
 }
+
 
 async function getCart(req, res) {
   const { userId } = req.params;
@@ -90,6 +97,6 @@ async function getCart(req, res) {
 module.exports = {
   addItemToCart,
   removeItemFromCart,
-  updateCartItemQuantity,
+  updateCartItemsQuantities,
   getCart,
 };
