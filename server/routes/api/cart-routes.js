@@ -10,19 +10,19 @@ const {
 } = require('../../controllers/cart-controller');
 
 router
-  .route('/:userId/cart')
+  .route('/:userId')
   .get(getCart);
   
 router
-  .route('/:userId/cart/add')
+  .route('/:userId/add')
   .post(addItemToCart);
 
 router
-  .route('/:userId/cart/remove/:productId')
+  .route('/:userId/remove/:productId')
   .delete(removeItemFromCart);
 
 router
-  .route('/:userId/cart/update/:productId')
+  .route('/:userId/update/:productId')
   .put(updateCartItemQuantity);
 
 

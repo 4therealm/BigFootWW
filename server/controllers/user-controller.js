@@ -69,10 +69,11 @@ module.exports = {
     const isVerified = jwt.verify(token, process.env.JWT_SECRET)
     if( !isVerified ) return res.status(401).json({msg: "un-authorized"})
 
-    const user = await User.findById(isVerified.id)
+    const user = await User.findById(isVerified.id).populate("cart")
+    console.log(user.cart.items)
     if( !user ) return res.status(401).json({msg: "un-authorized"})
     
-    return res.status(200).json({ _id: user._id, email: user.email})
+    return res.status(200).json({ _id: user._id, email: user.email, cart: user.cart })
   },
 
   async deleteUser({ params }, res) {

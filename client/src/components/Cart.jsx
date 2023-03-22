@@ -1,46 +1,35 @@
-import React, { useEffect } from 'react';
-import useCart from '../hooks/useCart';
+import React from 'react';
 import { useAppCtx } from '../utils/AppContext';
 
 const Cart = () => {
   const { user } = useAppCtx();
-  const { cart, getCart, updateItem, removeItem } = useCart(user);
-
-  useEffect(() => {
-    getCart();
-  }, [user, getCart]);
 
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Product ID</th>
-            <th>Quantity</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((item) => (
-            <tr key={item.id}>
-              <td>{item.productId}</td>
-              <td>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(event) =>
-                    updateItem(item.id, parseInt(event.target.value))
-                  }
-                  min="1"
-                />
-              </td>
-              <td>
-                <button onClick={() => removeItem(item.id)}>Remove</button>
-              </td>
+      {user && user.cart && user.cart.items.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+       
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {user.cart.items.map((item) => (
+              <tr key={item.productId}>
+      
+                <td>{item.name}</td>
+                <td>{item.quantity}</td>
+                <td>{item.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No items in the cart.</p>
+      )}
     </div>
   );
 };

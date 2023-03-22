@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { CardGroup, Card, Breadcrumb } from 'react-bootstrap';
-import ShoppingCart from './ShoppingCart';
-import useShoppingCartItem from '../hooks/useShoppingCartItem';
+import { useAppCtx } from '../utils/AppContext';
+
+
+
 
 
 
 
 
 const Categories = () => {
+
+  const { user} = useAppCtx();
+  // const userId = user._id;
+  
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,21 +21,9 @@ const Categories = () => {
   const [activeCategory, setActiveCategory] = useState(null);
   const [activeCategoryProducts, setActiveCategoryProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cart, setCart] = useState([]);
+  const [productId, setProductId] = useState(null);
 
-  const {
-    shoppingCartId,
-    setShoppingCartId,
-    productId,
-    setProductId,
-    quantity,
-    setQuantity,
-    itemId,
-    setItemId,
-    addItem,
-    updateItem,
-    removeItem,
-  } = useShoppingCartItem();
+
 
 
   useEffect(() => {
@@ -39,7 +33,7 @@ const Categories = () => {
   const getAllCategories = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/api/categories');
+      const response = await fetch('/api/category');
       const data = await response.json();
       setCategories(data);
       setLoading(false);
@@ -50,10 +44,31 @@ const Categories = () => {
     }
   };
 
+  const addItem = async (productId, quantity, price, name) => {
+    try {
+      const response = await fetch(`/api/cart/${user._id}/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, quantity, price, name }),
+      });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log('data', data);
+        } else {
+          throw new Error('Error adding item to cart');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
   const getOneCategory = async (id) => {
+    console.log('id', id);
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3001/api/categories/${id}`);
+      const response = await fetch(`/api/category/${id}`);
       const data = await response.json();
       setActiveCategory(data);
       setActiveCategoryProducts(data.products);
@@ -76,24 +91,18 @@ const Categories = () => {
     setSelectedProduct(null);
   };
 
-  const addToCart = async (product) => {
-    console.log('product', product);
-    setProductId(product.id);
-    setQuantity(1); // Assuming you want to add 1 item to the cart
-    await addItem();
-  };
+
 
 
   return (
     <>
-    <ShoppingCart cart={cart} />
     <Breadcrumb>
       <Breadcrumb.Item href="#" onClick={resetCategory}>
         Categories
       </Breadcrumb.Item>
       {activeCategory && (
         <Breadcrumb.Item href="#" onClick={resetProduct}>
-          {activeCategory.category_name}
+          {activeCategory.name}
         </Breadcrumb.Item>
       )}
       {selectedProduct && <Breadcrumb.Item active>{selectedProduct.product_name}</Breadcrumb.Item>}
@@ -103,9 +112,10 @@ const Categories = () => {
           {loading && <div>Loading...</div>}
           {error && <div>{error}</div>}
           {categories.map((category) => (
-            <Card key={category.id} onClick={() => getOneCategory(category.id)} style={{ cursor: 'pointer', margin: '10px', outline: '2px solid red' }}>
+            <Card key={category._id} onClick={() => getOneCategory(category._id)} style={{ color:'white', cursor: 'pointer', margin: '10px', outline: '2px solid red', background: 'black' }}>
               <Card.Body>
-                <Card.Title>{category.category_name}</Card.Title>
+                <Card.Title>{category.name}</Card.Title>
+                {/* <Card.Text>{category._id}</Card.Text> */}
               </Card.Body>
             </Card>
           ))}
@@ -118,9 +128,9 @@ const Categories = () => {
             <div>
               <ul>
                 {activeCategoryProducts.map((product) => (
-                  <div key={product.id}  style={{ border: '2px solid black', padding: '10px', margin: '10px' }}>
+                  <div key={product._id}  style={{ border: '2px solid black', padding: '10px', margin: '10px' }}>
                     <li>
-                      <p>Product: {product.product_name}</p>
+                      <p>Product: {product.name}</p>
                     </li>
                     <li>
                       <p>Price: {product.price}</p>
@@ -128,7 +138,11 @@ const Categories = () => {
                     <li>
                       <p>In stock: {product.stock}</p>
                     </li>
-                    <button onClick={() => addToCart(product)}>Add to Cart</button>
+                    <button
+  onClick={() => addItem(product._id, 1, product.price, product.name)}
+>
+  Add to Cart
+</button>
 
                   </div>
                 ))}

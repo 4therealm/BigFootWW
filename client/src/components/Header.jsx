@@ -36,10 +36,10 @@ const Header = () => {
               ) : (
                 <>
                   <li className="nav-item">
-                    <a className="nav-link" href="/cart">Cart</a>
+                    <a className="nav-link" href={`/cart/${user._id}`}>Cart</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="/">Store</a>
+                    <a className="nav-link" href="/store">Store</a>
                   </li>
                   <li className="nav-item">
                     <button onClick={logout}>logout</button>
