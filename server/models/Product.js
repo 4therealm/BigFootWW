@@ -14,7 +14,7 @@ const ProductSchema = new Schema({
     ref: 'Category',
     required: true,
   },
-  image: {
+  imageUrl: {
     type: String
   },
   stock: {

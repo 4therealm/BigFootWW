@@ -1,4 +1,6 @@
 const Product = require('../models/Product');
+const s3 = require('../config/aws-config');
+const fs = require('fs');
 
 // Get all products
 const getProducts = async (req, res) => {
@@ -83,7 +85,23 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+const uploadImageToS3 = async (filePath, bucketName) => {
+  // Read the image file
+  const fileContent = fs.readFileSync(filePath);
 
+  // Set up the S3 upload parameters
+  const params = {
+    Bucket: bucketName,
+    Key: `images/${Date.now()}_${path.basename(filePath)}`, // Filename with a timestamp prefix
+    Body: fileContent,
+    ContentType: 'image/jpeg', // Replace with the actual content type of your image (e.g., 'image/png' for PNG images)
+    ACL: 'public-read', // Make the image publicly accessible
+  };
+
+  // Upload the image to S3
+  const response = await s3.upload(params).promise();
+  return response.Location; // Return the URL of the uploaded image
+};
 
 
 
