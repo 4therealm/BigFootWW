@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Alert, Button, Row, Col } from 'react-bootstrap';
 import { useAppCtx } from '../utils/AppContext';
-import CheckoutForm from '../forms/checkoutForm';
+// import CheckoutForm from '../forms/checkoutForm';
 
 const Cart = () => {
   const { user, userCart, setUserCart, updatedCart, setUpdatedCart } = useAppCtx();
@@ -153,7 +153,7 @@ const Cart = () => {
       <Button variant="primary" onClick={checkout}>
         Checkout
       </Button>
-      <CheckoutForm totalPrice={totalPrice}/>
+      {/* <CheckoutForm totalPrice={totalPrice}/> */}
       </Container>
   );
 };
