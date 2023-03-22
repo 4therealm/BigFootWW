@@ -27,6 +27,26 @@ const Cart = () => {
       setHasQuantityChanged(true);
     }
   };
+
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(`/api/cart/${user._id}/checkout`, {
+        method: 'PUT',
+      });
+
+      if (response.ok) {
+        const updatedUserCart = await response.json();
+        console.log('Checkout successful:', updatedUserCart);
+        setUserCart(updatedUserCart);
+        setUpdatedCart(updatedUserCart.items);
+      } else {
+        throw new Error('Error checking out');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   
   const removeItem = async (userId, productId) => {
     try {
@@ -110,6 +130,9 @@ const Cart = () => {
           Update Cart
         </Button>
       )}
+      <Button variant="success" onClick={handleCheckout}>
+        Checkout
+      </Button>
       </Container>
   );
 };
