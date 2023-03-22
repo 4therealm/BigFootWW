@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import {CardGroup,Card,Breadcrumb,Button} from 'react-bootstrap'
 import {useAppCtx} from '../utils/AppContext'
+import ImageUploader from './ImageUploader'
 
 
 
@@ -97,6 +98,7 @@ const Categories=() => {
 
   return (
     <>
+    <ImageUploader productId={productId}/>
       <Breadcrumb>
         <Breadcrumb.Item href="#" onClick={resetCategory}>
           Categories
@@ -130,6 +132,7 @@ const Categories=() => {
               {activeCategoryProducts.map((product) => (
                 <Card key={product._id} style={{color: 'white', cursor: 'pointer',margin: '10px',outline: '2px solid red',background: 'black'}}>
                   <Card.Body>
+                    <Card.Img variant="top" src={product.imageUrl} />
                     <Card.Title>Product: {product.name}</Card.Title>
                     <Card.Text >Price: {product.price}</Card.Text>
                     <Card.Text >In stock: {product.stock}</Card.Text>

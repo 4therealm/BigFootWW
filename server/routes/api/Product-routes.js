@@ -1,6 +1,7 @@
 const router = require("express").Router();   
 const {getProducts, getProduct, createProduct, updateProduct, deleteProduct, createProductsBulk } = require("../../controllers/product-controller");
 const {uploadImageToS3} = require("../../config/aws-config");
+const upload = require("../../config/multer-config");
 
 // Set up GET all and POST at /api/products
 router
@@ -13,11 +14,12 @@ router
     .route('/bulk')
       .post(createProductsBulk);
 
-router.post('/upload/:id', async (req, res) => {
+
+      router.post('/upload/:id', upload.single('image'), async (req, res) => {
   try {
     const productId = req.params.id;
     const imagePath = req.file.path; // Replace this with the actual path of the uploaded image on your server
-    const bucketName = 'your-s3-bucket-name';
+    const bucketName = 'bfpimages';
 
     // Upload the image to S3 and get the image URL
     const imageUrl = await uploadImageToS3(imagePath, bucketName);
