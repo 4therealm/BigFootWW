@@ -46,14 +46,15 @@ const Categories=() => {
     }
   }
 
-  const addItem=async (productId,quantity,price,name, imgUrl) => {
+  const addItem=async (productId,quantity,price,name, imageUrl) => {
+    console.log("Product details:", {productId,quantity,price,name, imageUrl})
     try {
       const response=await fetch(`/api/cart/${user._id}/add`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({productId,quantity,price,name, imgUrl}),
+        body: JSON.stringify({productId,quantity,price,name, imageUrl}),
       })
 
       if(response.ok) {

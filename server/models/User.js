@@ -30,8 +30,13 @@ const userSchema = new Schema({
         quantity: {
           type: Number,
           required: true
-        }
-      }
+        },
+        imageUrl: {
+          type: String,
+
+      },
+      
+    },
     ]
   },
 

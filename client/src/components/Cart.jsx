@@ -109,7 +109,12 @@ const Cart = () => {
         <div>
           {updatedCart.map((item, index) => (
             <Row key={item.productId} className="mb-3">
-              <Col xs={12} md={3}>{item.imgUrl}{item.name}</Col>
+              <Col xs={12} md={3}><img src={item.imageUrl} alt={item.name} style={{width: '100px', height: '100px', objectFit: 'cover'}}></img></Col>
+              <Col xs={12} md={3}>
+                <Row>{item.name}</Row>
+                <Row>${item.price}</Row>
+                </Col>
+
               <Col xs={12} md={3}>
                 <Button variant="text-primary" size="lg" onClick={() => decreaseQuantity(index)}>
                   -
@@ -119,7 +124,8 @@ const Cart = () => {
                   +
                 </Button>
               </Col>
-              <Col xs={12} md={3}>${item.price}</Col>
+              <Col xs={12} md={3}>${item.price * item.quantity} </Col>
+
               <Col xs={12} md={3}>
                 <Button variant="danger" size="sm" onClick={() => removeItem(user._id, item.productId)}>
                   Remove

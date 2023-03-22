@@ -3,7 +3,7 @@ const {User} = require('../models/');
 
 async function addItemToCart(req, res) {
   const { userId } = req.params;
-  const { productId, quantity, price, name, imgUrl } = req.body;
+  const { productId, quantity, price, name, imageUrl } = req.body;
   console.log(req.body);
 
   try {
@@ -21,7 +21,7 @@ async function addItemToCart(req, res) {
       user.cart.items[cartItemIndex].quantity += quantity;
     } else {
       // Add a new item to the cart
-      user.cart.items.push({ productId, quantity, price, name, imgUrl });
+      user.cart.items.push({ productId, quantity, price, name, imageUrl });
     }
 
     await user.save();
