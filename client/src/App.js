@@ -3,8 +3,10 @@ import { AppProvider } from "./utils/AppContext";
 import { Header, Wrapper } from "./components"
 import { HomePage, LoginPage, SignupPage, CartPage, StorePage } from "./pages";
 
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css'
+
 
 function App() {
 
@@ -12,6 +14,7 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Wrapper>
+      
           <Header />
           <div className="pt-3 px-4">
             <Routes>
@@ -23,6 +26,7 @@ function App() {
 
             </Routes>
           </div>
+        
         </Wrapper>
       </BrowserRouter>
     </AppProvider>

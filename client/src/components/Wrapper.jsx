@@ -5,7 +5,7 @@
 const Wrapper = ({children}) => {
 
   return (
-    <div style={{ height: "500vh", backgroundColor: "#111"}}>
+    <div style={{ height: "500vh", backgroundColor: "#ffffff", color: ';white'}}>
       { children }
     </div>
   )
