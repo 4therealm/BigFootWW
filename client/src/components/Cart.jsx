@@ -5,6 +5,8 @@ import { useAppCtx } from '../utils/AppContext';
 const Cart = () => {
   const { user, userCart, setUserCart, updatedCart, setUpdatedCart } = useAppCtx();
   const [hasQuantityChanged, setHasQuantityChanged] = useState(false);
+  const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
+
 
   useEffect(() => {
     if (user && user.cart) {
@@ -28,19 +30,24 @@ const Cart = () => {
     }
   };
 
-  const handleCheckout = async () => {
+  const checkout = async () => {
     try {
-      const response = await fetch(`/api/cart/${user._id}/checkout`, {
-        method: 'PUT',
+      const response = await fetch(`/api/order/checkout/${user._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ products: updatedCart }),
       });
-
+  
       if (response.ok) {
-        const updatedUserCart = await response.json();
-        console.log('Checkout successful:', updatedUserCart);
-        setUserCart(updatedUserCart);
-        setUpdatedCart(updatedUserCart.items);
+        const data = await response.json();
+        console.log('Checkout successful:', data);
+        setUpdatedCart([]); // Clear the cart
+        setUserCart([]); // Update the user cart context
+        setShowCheckoutSuccess(true); // Show a success message
       } else {
-        throw new Error('Error checking out');
+        throw new Error('Error during checkout');
       }
     } catch (error) {
       console.error(error);
@@ -130,7 +137,12 @@ const Cart = () => {
           Update Cart
         </Button>
       )}
-      <Button variant="success" onClick={handleCheckout}>
+    {showCheckoutSuccess && (
+        <Alert variant="success" onClose={() => setShowCheckoutSuccess(false)} dismissible>
+          Checkout successful!
+        </Alert>
+      )}
+      <Button variant="primary" onClick={checkout}>
         Checkout
       </Button>
       </Container>
