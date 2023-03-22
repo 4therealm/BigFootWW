@@ -75,6 +75,7 @@ const Categories=() => {
       console.log(data.category.name)
       setActiveCategory(data)
       setActiveCategoryProducts(data.products)
+      console.log(data.products)
       setShowCategories(false)
       setLoading(false)
     } catch(error) {

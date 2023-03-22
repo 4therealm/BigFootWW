@@ -14,6 +14,9 @@ const ProductSchema = new Schema({
     ref: 'Category',
     required: true,
   },
+  imageFileName: {
+    type: String,
+  },
   imageUrl: {
     type: String
   },
