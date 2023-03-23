@@ -55,14 +55,14 @@ export default function PaymentMethods() {
 
   const totalPrice=calculateTotalPrice()
 
-  const calculateTotalItems = () => {
-    let total = 0;
+  const calculateTotalItems=() => {
+    let total=0
     updatedCart.forEach(item => {
-      total += item.quantity;
-    });
-    return total;
+      total+=item.quantity
+    })
+    return total
   }
-  
+
   const checkout=async () => {
     try {
       const response=await fetch(`/api/order/checkout/${user._id}`,{
@@ -131,92 +131,78 @@ export default function PaymentMethods() {
   return (
     <section className="h-100 gradient-custom">
       <MDBContainer className="py-5 h-100">
-
         <MDBRow className="justify-content-center my-4">
           <MDBCol md="8">
             <MDBCard className="mb-4">
               <MDBCardHeader className="py-3">
                 <MDBTypography tag="h5" className="mb-0">
-                <MDBTypography tag="h5" className="mb-0">
-  {calculateTotalItems()} item(s) in your cart
-</MDBTypography>
-
+                  <MDBTypography tag="h5" className="mb-0">
+                    {calculateTotalItems()} item(s) in your cart
+                  </MDBTypography>
                 </MDBTypography>
               </MDBCardHeader>
               <MDBCardBody>
-
                 {updatedCart.length>0? (
                   <div>
                     {hasQuantityChanged&&(
-                              <button variant="primary" onClick={updateCart}>
-                                Update Cart
-                              </button>
-                            )}
+                      <button variant="primary" onClick={updateCart}>
+                        Update Cart
+                      </button>
+                    )}
                     {updatedCart.map((item,index) => (
                       <MDBRow key={item.productId}>
+
                         <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
                           <MDBRipple rippleTag="div" rippleColor="light"
                             className="bg-image rounded hover-zoom hover-overlay">
-                            <img src={item.imageUrl} alt={item.name} />
-                            {/* the product image */}
-                            <a href="#!">
-                              <div className="mask" style={{backgroundColor: "rgba(251, 251, 251, 0.2)",}}>
-                              </div>
-                            </a>
-                          </MDBRipple>
+                            <img src={item.imageUrl} alt={item.name} style={{width: '100px', height: '100px',}} />
+                            </MDBRipple>
                         </MDBCol>
-
-                        {/* name, price and stock */}
                         <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
                           <p>
                             <strong>{item.name}</strong>
                           </p>
-
-
+                          <p>description</p>
+                          {/* <p>{item.description}</p> */}
                           <MDBTooltip wrapperProps={{size: "sm"}} wrapperClass="me-1 mb-2"
                             title="Remove item" onClick={() => removeItem(user._id,item.productId)}>
-                            <p>Remove item</p>
+                          
                             <MDBIcon fas icon="trash" />
                           </MDBTooltip>
 
                           <MDBTooltip wrapperProps={{size: "lsm",color: "danger"}} wrapperClass="me-1 mb-2"
                             title="Move to the wish list">
-                            <p>wish list</p>
+                    
                             <MDBIcon fas icon="heart" />
                           </MDBTooltip>
 
                         </MDBCol>
                         <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
 
-                          <MDBBtn variant="text-primary" size="lg" onClick={() => decreaseQuantity(index)}>
-                            -
+                          <MDBBtn variant="text-primary" size="lg" onClick={() => decreaseQuantity(index)}> -
+                          <MDBIcon fas icon="minus" />
                           </MDBBtn>{' '}
                           {item.quantity}{' '}
-                          <MDBBtn variant="text-primary" size="lg" onClick={() => increaseQuantity(index)}>
-                            +
+                          <MDBBtn variant="text-primary" size="lg" onClick={() => increaseQuantity(index)}>+
+                          <MDBIcon fas icon="plus" />
                           </MDBBtn>
-
-
                           <p className="text-start text-md-center">
-                            <strong>{totalPrice}</strong>
-                            
+                          <strong>${item.price * item.quantity}</strong>
+                          <p>${item.price}/each</p>
                           </p>
                         </MDBCol>
                       </MDBRow>
                     ))}
-                    
+
                   </div>
                 ):(
                   <div>
                     <p>Your cart is empty</p>
                   </div>
                 )}
-
-             </MDBCardBody>
+              </MDBCardBody>
             </MDBCard>
           </MDBCol>
-
-
           <MDBCol md="4">
             <MDBCard className="mb-4">
               <MDBCardHeader>
@@ -239,18 +225,15 @@ export default function PaymentMethods() {
                     className="d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                     <div>
                       <strong>Total amount</strong>
-                      <strong>
-                        <p className="mb-0">(including VAT)</p>
-                      </strong>
+                    
                     </div>
                     <span>
                       <strong>${totalPrice}</strong>
                     </span>
                   </MDBListGroupItem>
                 </MDBListGroup>
-
-                <MDBBtn block size="lg">
-                  Go to checkout
+                <MDBBtn block size="lg" onClick={checkout}>
+                  checkout
                 </MDBBtn>
               </MDBCardBody>
             </MDBCard>
